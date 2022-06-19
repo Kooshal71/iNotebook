@@ -74,4 +74,22 @@ router.put("/updatenote/:id", fetchUser, async (req, res) => {
   res.json({ note });
 });
 
+//! ROUTE4: Deleting an existing note "api/notes/deletenote"
+
+router.delete("/deletenote/:id", fetchUser, async (req, res) => {
+  // Checks if the note exists
+  let note = await Notes.findById(req.params.id);
+  if (!note) {
+    return res.status(404).send("Note not found");
+  }
+  //? Checks if the same user is trying to access to note
+  if (note.user.toString() !== req.user.id) {
+    return res.status(401).send("Not Allowed");
+  }
+  // Finds the note which needs to be deleted
+  note = await Notes.findByIdAndDelete(req.params.id);
+  // req.params.id is the id of the note; req.user.id is the id of the user tring to access the note; note.user is the id of the user who created the note
+  res.json({ Success: "The note has been deleted", note: note });
+});
+
 module.exports = router;

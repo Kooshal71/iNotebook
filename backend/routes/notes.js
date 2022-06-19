@@ -39,4 +39,39 @@ router.post(
   }
 );
 
+//! ROUTE3: Updating an existing note "api/notes/updatenote"
+
+router.put("/updatenote/:id", fetchUser, async (req, res) => {
+  const { title, description, tag } = req.body;
+  // Creating a new note
+  const newNote = {};
+  if (title) {
+    newNote.title = title;
+  }
+  if (description) {
+    newNote.description = description;
+  }
+  if (tag) {
+    newNote.tag = tag;
+  }
+
+  // Checks if the note exists
+  let note = await Notes.findById(req.params.id);
+  if (!note) {
+    return res.status(404).send("Note not found");
+  }
+  //? Checks if the same user is trying to access to note
+  if (note.user.toString() !== req.user.id) {
+    return res.status(401).send("Not Allowed");
+  }
+  // Finds the note which needs to be updated
+  note = await Notes.findByIdAndUpdate(
+    req.params.id,
+    { $set: newNote },
+    { new: true }
+    // req.params.id is the id of the note; req.user.id is the id of the user tring to access the note; note.user is the id of the user who created the note
+  );
+  res.json({ note });
+});
+
 module.exports = router;

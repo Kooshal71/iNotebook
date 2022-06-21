@@ -1,5 +1,4 @@
 import React from "react";
-
 export default function NoteItem(props) {
   const { note } = props;
   return (
@@ -11,12 +10,14 @@ export default function NoteItem(props) {
             {note.date.slice(0, 10)}
           </h6>
           <p className="card-text">{note.description}</p>
-          <a href="/" className="card-link">
-            {note.tag}
-          </a>
-          <a href="/" className="card-link">
-            Another link
-          </a>
+          <div className="d-flex justify-content-between">
+            <a href="/" className="card-link text-success">
+              <i className="fa-solid fa-pen-to-square fa-xl"></i>
+            </a>
+            <a href="/" className="card-link text-danger">
+              <i className="fa-solid fa-trash fa-xl"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>

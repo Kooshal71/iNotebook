@@ -7,11 +7,12 @@ export default function AddNote() {
   const [Note, setNote] = useState({
     title: "",
     description: "",
-    tag: "general",
+    tag: "",
   });
   const handleSubmit = (e) => {
     e.preventDefault();
     addNote(Note.title, Note.description, Note.tag);
+    setNote({ title: "", description: "", tag: "" });
   };
   const handleChange = (e) => {
     setNote({ ...Note, [e.target.name]: e.target.value });
@@ -30,6 +31,8 @@ export default function AddNote() {
             id="title"
             name="title"
             onChange={handleChange}
+            required
+            value={Note.title}
           />
         </div>
         <div className="mb-3">
@@ -42,6 +45,8 @@ export default function AddNote() {
             id="description"
             name="description"
             onChange={handleChange}
+            value={Note.description}
+            required
           />
         </div>
         <div className="mb-3">
@@ -49,17 +54,20 @@ export default function AddNote() {
             Tag
           </label>
           <input
+            value={Note.tag}
             type="text"
             className="form-control"
             id="tag"
             name="tag"
             onChange={handleChange}
+            required
           />
         </div>
         <button
           //   type="submit"
           className="btn btn-primary btn-xl"
           onClick={handleSubmit}
+          disabled={Note.title.length < 5 || Note.description.length < 5}
         >
           Add Note
         </button>

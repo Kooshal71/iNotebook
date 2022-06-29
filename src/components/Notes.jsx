@@ -38,7 +38,7 @@ export default function Notes() {
   return (
     <>
       <h1 className="my-5">Your Notes</h1>
-
+      {Notes.length === 0 && "No Notes to display"}
       <div
         className="modal fade"
         id="exampleModal"
@@ -72,6 +72,7 @@ export default function Notes() {
                     name="title"
                     onChange={handleChange}
                     value={Note.title}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -85,6 +86,7 @@ export default function Notes() {
                     name="description"
                     onChange={handleChange}
                     value={Note.description}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -98,6 +100,7 @@ export default function Notes() {
                     name="tag"
                     onChange={handleChange}
                     value={Note.tag}
+                    required
                   />
                 </div>
                 <div className="modal-footer">
@@ -113,6 +116,9 @@ export default function Notes() {
                     type="submit"
                     className="btn btn-success"
                     onClick={handleSubmit}
+                    disabled={
+                      Note.title.length < 5 || Note.description.length < 5
+                    }
                   >
                     Update
                   </button>

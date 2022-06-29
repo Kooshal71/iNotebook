@@ -24,14 +24,16 @@ router.post(
         res.status(400).json({ errors: errors.array() });
       }
       //   Create a new note
-      const note = new Notes({
-        title,
-        description,
-        tag,
-        user: req.user.id,
-      });
-      const savedNote = await note.save();
-      res.json(savedNote);
+      else {
+        const note = new Notes({
+          title,
+          description,
+          tag,
+          user: req.user.id,
+        });
+        const savedNote = await note.save();
+        res.json(savedNote);
+      }
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server side issue");

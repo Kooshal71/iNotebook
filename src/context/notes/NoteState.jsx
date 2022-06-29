@@ -22,7 +22,7 @@ const NoteState = (props) => {
 
   // Add a note
   const addNote = async (title, description, tag) => {
-    const response = await fetch(`${host}/api/notes/addnote`, {
+    const response = await fetch(`${host}/api/notes/addnotes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,8 +31,6 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const json = response.json();
-
     // note = null;
     console.log("We have entered the function");
     const note = {
@@ -44,12 +42,25 @@ const NoteState = (props) => {
       date: "2022-06-19T06:33:06.118Z",
       __v: 0,
     };
-    console.log(title, description, tag);
+    const json = response.json();
+    console.log(json);
+    // console.log(title, description, tag);
     setNotes(Notes.concat(note));
   };
 
   // Delete a note
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJhZGI3MDY1Mzg5MTQzMDRlMTMwZmVlIn0sImlhdCI6MTY1NTU1MjgwM30.zSWuW2fSXzE-0irWOlHQds6sjX6Q9k6F5wY2G_U3FEY",
+      },
+    });
+    const json = response.json();
+    console.log(json);
+
     console.log("Deleting note with id:", id);
     const newNotes = Notes.filter((note) => {
       return note._id !== id;
@@ -60,7 +71,7 @@ const NoteState = (props) => {
   // edit a note
   const editNote = async (id, title, description, tag) => {
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
@@ -69,6 +80,7 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = response.json();
+    console.log(json);
     for (let index = 0; index < Notes.length; index++) {
       const element = Notes[index];
       if (element._id === id) {
@@ -79,7 +91,6 @@ const NoteState = (props) => {
     }
   };
   return (
-    // <NoteContext.provider value={state}>{props.children}</NoteContext.provider>
     <NoteContext.Provider
       value={{ Notes, setNotes, addNote, deleteNote, editNote, getNotes }}
     >

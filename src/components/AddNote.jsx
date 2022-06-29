@@ -44,6 +44,18 @@ export default function AddNote() {
             onChange={handleChange}
           />
         </div>
+        <div className="mb-3">
+          <label htmlFor="tag" className="form-label">
+            Tag
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="tag"
+            name="tag"
+            onChange={handleChange}
+          />
+        </div>
         <button
           //   type="submit"
           className="btn btn-primary btn-xl"

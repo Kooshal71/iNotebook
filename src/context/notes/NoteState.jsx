@@ -84,9 +84,9 @@ const NoteState = (props) => {
     for (let index = 0; index < Notes.length; index++) {
       const element = Notes[index];
       if (element._id === id) {
-        element.tag = tag;
-        element.title = title;
-        element.description = description;
+        Notes[index].tag = tag;
+        Notes[index].title = title;
+        Notes[index].description = description;
       }
     }
   };

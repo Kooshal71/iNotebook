@@ -16,6 +16,7 @@ router.post(
   body("password").isLength({ min: 7 }),
   //   Using express=validator but it does not check in the database for unique so we need a separate check
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -28,7 +29,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .send("User with the same email is already present");
+          .send(success, "User with the same email is already present");
       }
       //   Hashing of the password
       const salt = await bcrypt.genSalt(10);
@@ -44,8 +45,8 @@ router.post(
         id: user.id,
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
       //   Catches unknown errors
     } catch (error) {
       console.error(error);
@@ -67,6 +68,7 @@ router.post(
   body("email", "Enter a valid email").isEmail(),
   body("password", "Password cannot be blank").exists(),
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -91,7 +93,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json(authToken);
+      success = true;
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Some error occurred");

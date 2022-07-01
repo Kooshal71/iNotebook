@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
@@ -24,13 +24,17 @@ export default function Login() {
     });
     const json = await response.json();
     console.log(json);
-    if (json) {
-      localStorage.setItem("token", json);
+    if (json.success) {
+      localStorage.setItem("token", json.authToken);
       navigate("/");
+      props.showAlert("success", "You are logged in");
+    } else {
+      props.showAlert("warning", "Invalid Credentials");
     }
   };
   return (
-    <div>
+    <div className="container my-3">
+      <h2>Login to iNotebook</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">

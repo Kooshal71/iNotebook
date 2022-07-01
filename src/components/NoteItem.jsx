@@ -34,6 +34,7 @@ export default function NoteItem(props) {
                 className="fa-solid fa-trash fa-xl text-danger"
                 onClick={() => {
                   deleteNote(note._id);
+                  props.showAlert("danger", "The note has been deleted");
                 }}
               ></i>
             </button>

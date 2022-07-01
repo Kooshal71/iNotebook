@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import NoteContext from "../context/notes/NoteContext";
 import NoteItem from "./NoteItem";
-
-export default function Notes() {
+import { useNavigate } from "react-router-dom";
+export default function Notes(props) {
   const context = useContext(NoteContext);
   const { Notes, getNotes, editNote } = context;
   const [Note, setNote] = useState({
@@ -13,14 +13,19 @@ export default function Notes() {
   });
 
   const closeButton = useRef(null);
-
+  const navigate = useNavigate();
   const getData = (id, title, description, tag) => {
     setNote({ id: id, title: title, description: description, tag: tag });
     console.log(id);
   };
 
   useEffect(() => {
-    getNotes();
+    if (localStorage.getItem("token")) {
+      getNotes();
+    } else {
+      navigate("/login");
+    }
+
     // eslint-disable-next-line
   }, []);
   const handleSubmit = async (e) => {
@@ -30,6 +35,7 @@ export default function Notes() {
     console.log("Success");
     closeButton.current.click();
     getNotes();
+    props.showAlert("success", "The note has been edited");
   };
   const handleChange = (e) => {
     setNote({ ...Note, [e.target.name]: e.target.value });
@@ -130,7 +136,14 @@ export default function Notes() {
       </div>
       <div className="row">
         {Notes.map((note) => {
-          return <NoteItem note={note} key={note._id} getId={getData} />;
+          return (
+            <NoteItem
+              note={note}
+              key={note._id}
+              getId={getData}
+              showAlert={props.showAlert}
+            />
+          );
         })}
       </div>
     </>
